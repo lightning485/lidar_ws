@@ -10,6 +10,7 @@ sudo make install
 cd $setup_wd
 
 rosdep install --from-paths src --ignore-src -r -y
+pip install -r requirements.txt
 
 catkin init
 catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release

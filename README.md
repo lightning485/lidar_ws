@@ -10,6 +10,7 @@ This contains a ROS 1 workspace for playing around with my Livox Avia LiDAR
   * Installation: ```sudo apt install python3-vcstool```
   * Usage: ```vcs import src < dependencies.rosinstall```
 * ```rosdep install --from-paths src --ignore-src -r -y```
+* Python packages might not by found by rosdep... ```pip install -r requirements.txt```
 * Build the workspace manually
 
 ### All at once
