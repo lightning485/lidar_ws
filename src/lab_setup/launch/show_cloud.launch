@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find lab_setup)/launch/just_sensor.launch" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="rotator" args="0 0 0 0 -1.5707963267948966 0 livox_frame livox_frontview" />
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find lab_setup)/rviz/just_cloud.rviz" required="true" />
+  <!-- required so that the session ends when rviz is closed -->
+</launch>

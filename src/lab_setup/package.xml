@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lab_setup</name>
+  <version>0.0.0</version>
+  <description>The lab_setup package</description>
+  <maintainer email="todo@todo.dodo">lightning485</maintainer>
+  <!-- no seriously, it's github user lightning480 -->
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

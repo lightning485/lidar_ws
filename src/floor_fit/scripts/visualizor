@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+import rospy
+import numpy as np
+from pyquaternion import Quaternion
+from visualization_msgs.msg import Marker
+from pcl_msgs.msg import ModelCoefficients
+
+class Visualizor:
+    def __init__(self, model_topic="/model", marker_topic="/marker", size = 6.0):
+        """
+        Receives pcl_ros plane model and sends marker for rviz
+        * size: [m] how large the plane is supposed to be
+        """
+        self.size = size
+        self.thickness = 0.02 # [m] thickness of the plane
+        self.pub = rospy.Publisher(marker_topic, Marker)
+        self.sub = rospy.Subscriber(model_topic, ModelCoefficients, self.callback)
+        
+    def callback(self, msg):
+        model_coefficients = msg.values
+        n = np.array([model_coefficients[0],model_coefficients[1],model_coefficients[2]])
+        n_unity = n / np.linalg.norm(n)
+        up_unity = np.array([0.0,0.0,1.0])
+        q = Quaternion(
+            axis=np.cross(up_unity, n_unity),
+            angle=np.arccos(np.dot(up_unity, n_unity))
+            )
+        
+        marker = Marker()
+        marker.header.stamp = msg.header.stamp
+        marker.header.frame_id = msg.header.frame_id
+        marker.type = 1
+        marker.ns = "visualizor"
+        marker.id = 0
+        marker.scale.x = self.size
+        marker.scale.y = self.size
+        marker.scale.z = self.thickness
+        marker.color.r = 1.0
+        marker.color.g = 1.0
+        marker.color.b = 1.0
+        marker.color.a = 0.30
+        marker.pose.position.x = 0
+        marker.pose.position.y = 0
+        marker.pose.position.z = -model_coefficients[3]/model_coefficients[2]
+        marker.pose.orientation.x = q.x
+        marker.pose.orientation.y = q.y
+        marker.pose.orientation.z = q.z
+        marker.pose.orientation.w = q.w
+        self.pub.publish(marker)
+
+
+if __name__ == '__main__':
+    rospy.init_node('visualizor', anonymous=True)
+    visualizor = Visualizor()
+    rospy.spin()
